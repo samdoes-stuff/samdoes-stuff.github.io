@@ -1,31 +1,15 @@
-// Wikipedia On This Day API base
-const WIKI_API_BASE = "https://en.wikipedia.org/api/rest_v1/feed/onthisday";
-
-// Utility to get month and day from date string
-function getMonthDay(dateStr) {
-  const d = new Date(dateStr);
-  return [d.getMonth() + 1, d.getDate()];
-}
-
 function getTodayDateString() {
   const today = new Date();
   return today.toISOString().slice(0, 10);
 }
-
-// Fetch data from Wikipedia's On This Day API
-async function fetchWikiOnThisDay(type, month, day) {
-  const url = `${WIKI_API_BASE}/${type}/${month}/${day}`;
-  try {
-    const res = await fetch(url);
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data[type] || [];
-  } catch (e) {
-    return [];
-  }
+function getMonthDay(dateStr) {
+  const d = new Date(dateStr);
+  return [d.getMonth() + 1, d.getDate()];
 }
+// Wikipedia On This Day API base
+const WIKI_API_BASE = "https://en.wikipedia.org/api/rest_v1/feed/onthisday";
 
-// Get random fun fact (you can expand this)
+// Fun Facts
 function getRandomFunFact() {
   const facts = [
     "You share a birthday with a lot of cool people!",
@@ -35,7 +19,9 @@ function getRandomFunFact() {
     "Wombat poop is cube-shaped. Seriously.",
     "The inventor of the frisbee was turned into a frisbee.",
     "A group of flamingos is called a 'flamboyance'.",
-    "Honey never spoils."
+    "Honey never spoils.",
+    "The Eiffel Tower can be 15 cm taller in summer.",
+    "Some cats are allergic to humans."
   ];
   return facts[Math.floor(Math.random() * facts.length)];
 }
@@ -81,6 +67,18 @@ function setTodayText(dateStr) {
   const inputStr = inputDate.toISOString().slice(0, 10);
   const el = document.getElementById("today-text");
   el.textContent = (todayStr === inputStr) ? "(Today!)" : "";
+}
+
+async function fetchWikiOnThisDay(type, month, day) {
+  const url = `${WIKI_API_BASE}/${type}/${month}/${day}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data[type] || [];
+  } catch (e) {
+    return [];
+  }
 }
 
 // Main function to update all sections
