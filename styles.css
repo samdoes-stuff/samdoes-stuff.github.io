@@ -312,10 +312,10 @@ body.dark {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2em 0 2em 0;
   margin: 0 auto 2em auto;
-  width: 100%;
-  max-width: 900px;
+  padding: 2em 0 2em 0;
+  width: fit-content;
+  max-width: 100vw;
   z-index: 2;
 }
 .carousel-label {
@@ -336,93 +336,13 @@ body.dark {
   padding: 1em 0;
   width: fit-content;
   min-width: 0;
-  max-width: 98vw;
+  max-width: 90vw;
   overflow-x: auto;
   scroll-behavior: smooth;
   margin: 0 auto;
   align-items: flex-start;
 }
 .carousel::-webkit-scrollbar { display: none; }
-.carousel-card {
-  background: var(--card-bg);
-  border-radius: 1.2em;
-  box-shadow: var(--shadow);
-  min-width: 180px;
-  max-width: 200px;
-  flex: 0 0 auto;
-  position: relative;
-  transition: transform 0.4s, box-shadow 0.2s;
-  cursor: pointer;
-  margin-bottom: 0.2em;
-}
-.carousel-card:focus-within { outline: 2px solid var(--accent2); }
-.carousel-img-wrap {
-  position: relative;
-  border-radius: 1em 1em 0 0;
-  overflow: hidden;
-}
-.carousel-img {
-  width: 100%;
-  aspect-ratio: 4/5;
-  object-fit: cover;
-  border-radius: 1em 1em 0 0;
-  background: #ddd;
-  display: block;
-  transition: filter 0.2s;
-}
-.carousel-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(30,36,60,0.93);
-  color: #fff;
-  border-radius: 1.2em 1.2em 0 0;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.29s;
-  z-index: 10;
-  padding: 1.2em 1em;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.carousel-img-wrap:hover .carousel-card-overlay,
-.carousel-img-wrap:focus-within .carousel-card-overlay {
-  opacity: 1;
-  pointer-events: auto;
-}
-.carousel-card-overlay-title {
-  font-weight: 700;
-  margin-bottom: 0.7em;
-  font-size: 1.1em;
-  color: var(--accent2);
-}
-.carousel-card-overlay-desc {
-  font-size: 0.97em;
-  line-height: 1.5;
-  color: #f5d0c5;
-  max-height: 9em;
-  overflow-y: auto;
-}
-.carousel-card-content {
-  padding: 1em 0.6em 1.2em 0.6em;
-  text-align: center;
-}
-.carousel-card-name {
-  font-size: 1.05em;
-  color: var(--accent);
-  font-weight: 700;
-}
-.carousel-card-year {
-  color: var(--accent2);
-  font-size: 1em;
-  font-weight: 500;
-}
-.carousel-card-link {
-  display: block;
-  margin-top: 0.4em;
-  color: var(--accent2);
-  font-size: 0.98em;
-}
 .carousel-arrow {
   background: var(--accent);
   color: #fff;
@@ -438,7 +358,7 @@ body.dark {
   cursor: pointer;
   box-shadow: 0 1px 8px rgba(80,80,120,0.13);
   transition: background 0.2s;
-  opacity: 0.83;
+  opacity: 0.9;
   user-select: none;
   display: flex;
   align-items: center;
