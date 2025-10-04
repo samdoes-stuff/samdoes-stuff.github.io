@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Birthday Explorer - Max CSS Edition</title>
+  <title>Birthday Explorer - Ultimate Edition</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Fira+Mono&display=swap" rel="stylesheet">
@@ -16,22 +16,29 @@
   </div>
   <header>
     <h1><i class="fa-solid fa-cake-candles"></i> Birthday Explorer</h1>
+    <form id="optionsForm" class="options-panel">
+      <label class="switch"><input type="checkbox" id="showBirths" checked><span class="slider"></span><span class="label-txt">Famous Birthdays</span></label>
+      <label class="switch"><input type="checkbox" id="showEvents" checked><span class="slider"></span><span class="label-txt">Notable Events</span></label>
+      <label class="switch"><input type="checkbox" id="showDeaths" checked><span class="slider"></span><span class="label-txt">Deaths</span></label>
+      <label class="switch"><input type="checkbox" id="showHolidays" checked><span class="slider"></span><span class="label-txt">Holidays</span></label>
+      <label class="switch"><input type="checkbox" id="showFunFact" checked><span class="slider"></span><span class="label-txt">Fun Fact</span></label>
+      <button id="darkToggle" type="button" aria-label="Toggle dark mode"><i class="fa-solid fa-moon"></i></button>
+    </form>
     <label for="birthday-input" class="input-label">
       <span><i class="fa-solid fa-calendar-days"></i> Pick your birthday:</span>
       <input type="date" id="birthday-input" max="9999-12-31" />
     </label>
-    <button id="darkToggle" aria-label="Toggle dark mode"><i class="fa-solid fa-moon"></i></button>
   </header>
   <main id="results" class="results">
     <div class="placeholder">
-      <div class="emoji-bounce">🎈</div>
-      <p>Enter your birthday to unlock a world of stories!</p>
+      <div class="emoji-bounce">🎉</div>
+      <p>Enter your birthday and choose what to explore!</p>
     </div>
   </main>
   <footer>
     <p>
       Made with <span class="heart">❤️</span> by <a href="https://github.com/samdoes-stuff" target="_blank">@samdoes-stuff</a>
-      &middot; <span class="footer-tip">Try Dark Mode!</span>
+      &middot; <span class="footer-tip">Try toggling some options!</span>
     </p>
   </footer>
   <div id="loader" class="loader"></div>
