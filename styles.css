@@ -271,143 +271,6 @@ footer {
   0% { transform: scale(1);}
   100% { transform: scale(1.13);}
 }
-/* Keep your previous styles, then add or replace these parts for the carousel */
-
-.carousel-container {
-  position: relative;
-  padding: 2em 0 2em 0;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto 2em auto;
-  z-index: 2;
-}
-
-.carousel {
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  gap: 2em;
-  padding: 1em 0;
-  scrollbar-width: none;
-}
-.carousel::-webkit-scrollbar { display: none; }
-
-.carousel-card {
-  background: var(--card-bg);
-  border-radius: 1.2em;
-  box-shadow: var(--shadow);
-  min-width: 220px;
-  max-width: 240px;
-  flex: 0 0 auto;
-  position: relative;
-  transition: transform 0.4s, box-shadow 0.2s;
-  cursor: pointer;
-  overflow: visible;
-  margin-bottom: 0.2em;
-}
-
-.carousel-card:hover,
-.carousel-card:focus-within {
-  transform: scale(1.07) rotate(-2deg);
-  box-shadow: 0 12px 36px 0 var(--accent2), 0 8px 32px 0 rgba(31,38,135,0.18);
-  z-index: 4;
-}
-
-.carousel-img {
-  width: 100%;
-  aspect-ratio: 4/5;
-  object-fit: cover;
-  border-radius: 1em 1em 0 0;
-  background: #ddd;
-  display: block;
-}
-
-.carousel-card-content {
-  padding: 1.1em 1em 1.3em 1em;
-  text-align: center;
-}
-
-.carousel-card-name {
-  font-size: 1.09em;
-  color: var(--accent);
-  font-weight: 700;
-}
-.carousel-card-year {
-  color: var(--accent2);
-  font-size: 1em;
-  font-weight: 500;
-}
-.carousel-card-link {
-  display: block;
-  margin-top: 0.4em;
-  color: var(--accent2);
-  font-size: 0.98em;
-}
-
-.carousel-arrow {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  font-size: 1.7em;
-  width: 2.2em;
-  height: 2.2em;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 5;
-  cursor: pointer;
-  box-shadow: 0 1px 8px rgba(80,80,120,0.13);
-  transition: background 0.2s;
-  opacity: 0.8;
-  user-select: none;
-}
-.carousel-arrow:hover { background: var(--accent2); }
-
-.carousel-arrow.left { left: -1.4em; }
-.carousel-arrow.right { right: -1.4em; }
-
-@media (max-width: 700px) {
-  .carousel-container { max-width: 100vw; }
-  .carousel-card { min-width: 75vw; max-width: 85vw; }
-  .carousel-arrow.left { left: 0.1em; }
-  .carousel-arrow.right { right: 0.1em; }
-}
-
-/* Overlay for achievements */
-.carousel-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(30,36,60,0.93);
-  color: #fff;
-  border-radius: 1.2em;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.29s;
-  z-index: 10;
-  padding: 1.2em 1em;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.carousel-card:hover .carousel-card-overlay,
-.carousel-card:focus-within .carousel-card-overlay {
-  opacity: 1;
-  pointer-events: auto;
-}
-.carousel-card-overlay-title {
-  font-weight: 700;
-  margin-bottom: 0.7em;
-  font-size: 1.1em;
-  color: var(--accent2);
-}
-.carousel-card-overlay-desc {
-  font-size: 0.97em;
-  line-height: 1.5;
-  color: #f5d0c5;
-  max-height: 9em;
-  overflow-y: auto;
-}
 .loader {
   position: fixed;
   top: 54%;
@@ -443,13 +306,137 @@ body.dark {
   background: linear-gradient(120deg, var(--bg1) 0%, var(--bg2) 100%);
   color: var(--text);
 }
-/* Responsive */
-@media (max-width: 900px) {
-  .results { max-width: 97vw; }
+/* --- Birthdays Carousel --- */
+.carousel-container {
+  position: relative;
+  padding: 2em 0 2em 0;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 2em auto;
+  z-index: 2;
 }
+.carousel-label {
+  text-align: center;
+  font-size: 1.15em;
+  font-weight: 700;
+  margin-bottom: 0.7em;
+}
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1.2em;
+  padding: 1em 0;
+  scrollbar-width: none;
+  width: fit-content;
+  max-width: 94vw;
+  min-width: 0;
+}
+.carousel::-webkit-scrollbar { display: none; }
+.carousel-card {
+  background: var(--card-bg);
+  border-radius: 1.2em;
+  box-shadow: var(--shadow);
+  min-width: 180px;
+  max-width: 200px;
+  flex: 0 0 auto;
+  position: relative;
+  transition: transform 0.4s, box-shadow 0.2s;
+  cursor: pointer;
+  margin-bottom: 0.2em;
+}
+.carousel-card:focus-within { outline: 2px solid var(--accent2); }
+.carousel-img-wrap {
+  position: relative;
+  border-radius: 1em 1em 0 0;
+  overflow: hidden;
+}
+.carousel-img {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  border-radius: 1em 1em 0 0;
+  background: #ddd;
+  display: block;
+  transition: filter 0.2s;
+}
+.carousel-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(30,36,60,0.93);
+  color: #fff;
+  border-radius: 1.2em 1.2em 0 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.29s;
+  z-index: 10;
+  padding: 1.2em 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.carousel-img-wrap:hover .carousel-card-overlay,
+.carousel-img-wrap:focus-within .carousel-card-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+.carousel-card-overlay-title {
+  font-weight: 700;
+  margin-bottom: 0.7em;
+  font-size: 1.1em;
+  color: var(--accent2);
+}
+.carousel-card-overlay-desc {
+  font-size: 0.97em;
+  line-height: 1.5;
+  color: #f5d0c5;
+  max-height: 9em;
+  overflow-y: auto;
+}
+.carousel-card-content {
+  padding: 1em 0.6em 1.2em 0.6em;
+  text-align: center;
+}
+.carousel-card-name {
+  font-size: 1.05em;
+  color: var(--accent);
+  font-weight: 700;
+}
+.carousel-card-year {
+  color: var(--accent2);
+  font-size: 1em;
+  font-weight: 500;
+}
+.carousel-card-link {
+  display: block;
+  margin-top: 0.4em;
+  color: var(--accent2);
+  font-size: 0.98em;
+}
+.carousel-arrow {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.4em;
+  width: 1.9em;
+  height: 1.9em;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  cursor: pointer;
+  box-shadow: 0 1px 8px rgba(80,80,120,0.13);
+  transition: background 0.2s;
+  opacity: 0.83;
+  user-select: none;
+}
+.carousel-arrow.left { left: -2.2em; }
+.carousel-arrow.right { right: -2.2em; }
+.carousel-arrow:hover { background: var(--accent2); }
 @media (max-width: 700px) {
-  .results { margin: 1.1rem 0.2rem 1rem 0.2rem; }
-  .card { padding: 1.3rem 0.6rem; }
-  .placeholder { padding: 2.1rem 0.6rem; }
-  header h1 { font-size: 1.5rem;}
+  .carousel-container { max-width: 100vw; }
+  .carousel-card { min-width: 64vw; max-width: 75vw; }
+  .carousel-arrow.left { left: 0.1em; }
+  .carousel-arrow.right { right: 0.1em; }
 }
