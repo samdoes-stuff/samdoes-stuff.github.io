@@ -65,11 +65,10 @@ document.addEventListener("DOMContentLoaded", function() {
     label.innerHTML = '🎂 <span style="color:var(--accent);">Famous Birthdays</span>';
     container.appendChild(label);
 
-    // Carousel track
     const carousel = document.createElement('div');
     carousel.className = 'carousel';
 
-    // For looping, duplicate the first and last card at ends
+    // Prepare cards
     const cards = births.slice(0, 12).map(birth => {
       const page = (birth.pages && birth.pages[0]) || {};
       const img = page.thumbnail ? page.thumbnail.source : 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg';
@@ -118,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Scroll to "first" card
     setTimeout(() => {
-      carousel.scrollLeft = cards[0].offsetWidth;
+      carousel.scrollLeft = cards[0].offsetWidth + 20; // +gap
     }, 10);
 
     // Loop behavior
@@ -133,13 +132,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     carousel.addEventListener('scroll', handleScroll);
 
-    // Left/right button logic
+    // Both arrow navigation
     leftArrow.onclick = () => {
-      const cardWidth = cards[0].offsetWidth + 20; // gap
+      const cardWidth = cards[0].offsetWidth + 20;
       carousel.scrollBy({left: -cardWidth, behavior: 'smooth'});
     };
     rightArrow.onclick = () => {
-      const cardWidth = cards[0].offsetWidth + 20; // gap
+      const cardWidth = cards[0].offsetWidth + 20;
       carousel.scrollBy({left: cardWidth, behavior: 'smooth'});
     };
 
@@ -309,7 +308,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Fetch and display birthdays for today's date on page load
   function showTodaysBirths() {
-    // Set all toggles to default, but you can change as you wish
+    // Set all toggles to default
     if (showBirths) showBirths.checked = true;
     if (showDeaths) showDeaths.checked = false;
     if (showHolidays) showHolidays.checked = false;
