@@ -64,6 +64,9 @@ document.addEventListener("DOMContentLoaded", function() {
     label.innerHTML = '🎂 <span style="color:var(--accent);">Famous Birthdays</span>';
     container.appendChild(label);
 
+    const viewport = document.createElement('div');
+    viewport.className = 'carousel-viewport';
+
     const carousel = document.createElement('div');
     carousel.className = 'carousel';
 
@@ -104,6 +107,8 @@ document.addEventListener("DOMContentLoaded", function() {
     cards.forEach(card => carousel.appendChild(card));
     carousel.appendChild(firstClone); // Add first at end
 
+    viewport.appendChild(carousel);
+
     // Arrows
     const leftArrow = document.createElement('button');
     leftArrow.className = 'carousel-arrow left';
@@ -116,14 +121,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Center the carousel on the first “real” card
     function setInitialScroll() {
-      const cardWidth = cards[0].offsetWidth + 20;
+      const cardWidth = cards[0].offsetWidth + 22;
       carousel.scrollLeft = cardWidth;
     }
-    setTimeout(setInitialScroll, 60);
+    setTimeout(setInitialScroll, 80);
 
     // Loop behavior
     function handleScroll() {
-      const cardWidth = cards[0].offsetWidth + 20;
+      const cardWidth = cards[0].offsetWidth + 22;
       if (carousel.scrollLeft <= 0) {
         carousel.scrollLeft = cardWidth * cards.length;
       }
@@ -135,27 +140,27 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Both arrow navigation
     leftArrow.onclick = () => {
-      const cardWidth = cards[0].offsetWidth + 20;
+      const cardWidth = cards[0].offsetWidth + 22;
       carousel.scrollBy({left: -cardWidth, behavior: 'smooth'});
     };
     rightArrow.onclick = () => {
-      const cardWidth = cards[0].offsetWidth + 20;
+      const cardWidth = cards[0].offsetWidth + 22;
       carousel.scrollBy({left: cardWidth, behavior: 'smooth'});
     };
 
     // Auto-scroll loop
     let autoScroll = setInterval(() => {
       rightArrow.onclick();
-    }, 3000);
+    }, 3300);
     container.addEventListener('mouseenter', () => clearInterval(autoScroll));
     container.addEventListener('mouseleave', () => {
       autoScroll = setInterval(() => {
         rightArrow.onclick();
-      }, 3000);
+      }, 3300);
     });
 
     container.appendChild(leftArrow);
-    container.appendChild(carousel);
+    container.appendChild(viewport);
     container.appendChild(rightArrow);
 
     return container;
@@ -309,7 +314,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Fetch and display birthdays for today's date on page load
   function showTodaysBirths() {
-    // Set all toggles to default
     if (showBirths) showBirths.checked = true;
     if (showDeaths) showDeaths.checked = false;
     if (showHolidays) showHolidays.checked = false;
@@ -352,6 +356,5 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  // On first load, show today's birthdays by default
   showTodaysBirths();
 });
