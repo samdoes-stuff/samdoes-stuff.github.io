@@ -1,272 +1,151 @@
-document.addEventListener("DOMContentLoaded", function() {
-  const input = document.getElementById('birthday-input');
-  const results = document.getElementById('results');
-  const loader = document.getElementById('loader');
-  const darkToggle = document.getElementById('darkToggle');
-  const optionsForm = document.getElementById('optionsForm');
-  const showBirths = document.getElementById('showBirths');
-  const showEvents = document.getElementById('showEvents');
-  const showDeaths = document.getElementById('showDeaths');
-  const showHolidays = document.getElementById('showHolidays');
-  const showFunFact = document.getElementById('showFunFact');
+// Wikipedia On This Day API base
+const WIKI_API_BASE = "https://en.wikipedia.org/api/rest_v1/feed/onthisday";
 
-  // Fun facts list
-  const funFacts = [
-    "Did you know? Almost 17.7 million people around the world have the same birthday as you!",
-    "People born on your birthday share a star sign with you.",
-    "If you were born today, your birthstone is probably Opal or Tourmaline.",
-    "The odds of sharing your birthday with someone in a group of 23 is over 50%.",
-    "Some cultures believe your birthday is a lucky day for new beginnings!",
-    "You have a unique birthday number in the world’s population.",
-    "Famous historical figures may have celebrated just like you.",
-    "Having a birthday means you survived another trip around the sun. Congratulations!",
-    "On your birthday, it’s statistically likely that 19 million other people are celebrating too.",
-    "You share your birthday with at least one famous person, guaranteed!"
+// Utility to get month and day from date string
+function getMonthDay(dateStr) {
+  const d = new Date(dateStr);
+  return [d.getMonth() + 1, d.getDate()];
+}
+
+function getTodayDateString() {
+  const today = new Date();
+  return today.toISOString().slice(0, 10);
+}
+
+// Fetch data from Wikipedia's On This Day API
+async function fetchWikiOnThisDay(type, month, day) {
+  const url = `${WIKI_API_BASE}/${type}/${month}/${day}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data[type] || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+// Get random fun fact (you can expand this)
+function getRandomFunFact() {
+  const facts = [
+    "You share a birthday with a lot of cool people!",
+    "Did you know? Octopuses have three hearts.",
+    "Every year, more than 9,000 meteorites hit the Earth.",
+    "Bananas are berries, but strawberries are not!",
+    "Wombat poop is cube-shaped. Seriously.",
+    "The inventor of the frisbee was turned into a frisbee.",
+    "A group of flamingos is called a 'flamboyance'.",
+    "Honey never spoils."
   ];
+  return facts[Math.floor(Math.random() * facts.length)];
+}
 
-  let lastData = null;
-
-  function randomFact() {
-    return funFacts[Math.floor(Math.random() * funFacts.length)];
+function fillSection(albumId, dataArr, hoverField = "desc") {
+  const el = document.getElementById(albumId);
+  el.innerHTML = "";
+  if (!dataArr || !dataArr.length) {
+    el.innerHTML = `<div style="opacity:0.6; font-size:1.01rem; margin:1.3rem 0;">No data found for this date yet.</div>`;
+    return;
   }
-
-  if (darkToggle) {
-    darkToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const icon = darkToggle.querySelector('i');
-      if(document.body.classList.contains('dark')) {
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-      } else {
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
-      }
-    });
-  }
-
-  function clearResults() {
-    results.innerHTML = '';
-  }
-
-  function showMessage(msg, emoji='🎈') {
-    clearResults();
-    const div = document.createElement('div');
-    div.className = 'placeholder';
-    div.innerHTML = `<div class="emoji-bounce">${emoji}</div><p>${msg}</p>`;
-    results.appendChild(div);
-  }
-
-  function createCard(type, entry) {
-    let title = "";
-    let desc = "";
-    if (type === "birth" || type === "death" || type === "event" || type === "holiday") {
-      const parts = entry.text.split("–");
-      title = parts[1] ? parts[1].trim().split(',')[0] : entry.text;
-      desc = entry.text.trim();
-    }
-    let wiki = "";
-    if (entry.pages && Array.isArray(entry.pages) && entry.pages[0] && entry.pages[0].content_urls) {
-      wiki = entry.pages[0].content_urls.desktop.page;
-    }
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <h2>${title} <span class="year">(${entry.year || entry.wikidata || ""})</span></h2>
-      <div class="desc">${desc}</div>
-      ${wiki ? `<a href="${wiki}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-wikipedia-w"></i> Wikipedia</a>` : ''}
+  dataArr.forEach(item => {
+    el.innerHTML += `
+      <div class="album-card">
+        <img class="album-image" src="${item.image || "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"}" alt="${item.name}">
+        <div class="album-info">
+          <div class="album-title">${item.name}</div>
+          <div class="album-desc">${item.desc}</div>
+        </div>
+        <div class="album-hover">${item[hoverField]}</div>
+      </div>
     `;
-    return card;
-  }
+  });
+}
 
-  function createFunFactCard() {
-    const card = document.createElement('div');
-    card.className = 'card visible';
-    card.innerHTML = `
-      <h2>🎁 Fun Birthday Fact</h2>
-      <div class="desc">${randomFact()}</div>
-    `;
-    return card;
-  }
+function fillFunFact(sectionId, fact) {
+  const el = document.getElementById(sectionId);
+  el.textContent = fact;
+}
 
-  function createNoDeathsCard() {
-    const card = document.createElement('div');
-    card.className = 'card visible';
-    card.innerHTML = `
-      <h2>🕯️ Notable Deaths</h2>
-      <div class="desc">No famous deaths are recorded for this date.<br>
-      <em>Sometimes, a day is just for the living! 🎉</em></div>
-    `;
-    return card;
-  }
+function showSection(section, show) {
+  document.getElementById(section + "-section").style.display = show ? "" : "none";
+}
 
-  function revealOnScroll() {
-    const cards = document.querySelectorAll('.card:not(.visible)');
-    if (!('IntersectionObserver' in window)) {
-      cards.forEach(card => card.classList.add('visible'));
-      return;
+function setTheme(isDark) {
+  document.body.classList.toggle("dark", isDark);
+}
+
+function setTodayText(dateStr) {
+  const now = new Date();
+  const inputDate = new Date(dateStr);
+  const todayStr = now.toISOString().slice(0, 10);
+  const inputStr = inputDate.toISOString().slice(0, 10);
+  const el = document.getElementById("today-text");
+  el.textContent = (todayStr === inputStr) ? "(Today!)" : "";
+}
+
+// Main function to update all sections
+async function updateAll(dateStr) {
+  const [month, day] = getMonthDay(dateStr);
+
+  // Fetch from Wikipedia API
+  const [births, deaths] = await Promise.all([
+    fetchWikiOnThisDay("births", month, day),
+    fetchWikiOnThisDay("deaths", month, day)
+  ]);
+
+  // Map the data into album card format
+  const mapWiki = arr => arr.slice(0, 8).map(item => ({
+    name: item.text || item.pages?.[0]?.normalizedtitle || item.year,
+    image: item.pages?.[0]?.thumbnail?.source || "",
+    desc: `Year: ${item.year}`,
+    achievements: item.pages?.[0]?.description || ""
+  }));
+
+  fillSection("births-album", mapWiki(births), "achievements");
+  fillSection("deaths-album", mapWiki(deaths), "achievements");
+
+  // Movies/animes: placeholder (or use Wikidata SPARQL for enhancement)
+  fillSection("movies-album", [
+    {
+      name: "Try the Wikidata Query Service for movie releases!",
+      image: "",
+      desc: "Movie & anime releases for this day will appear here.",
+      awards: "Coming soon"
     }
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.18 });
-    cards.forEach(card => observer.observe(card));
-  }
+  ], "awards");
 
-  async function fetchOnThisDay(month, day) {
-    const url = `https://en.wikipedia.org/api/rest_v1/feed/onthisday/all/${month}/${day}`;
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
-    try {
-      const resp = await fetch(url, { signal: controller.signal });
-      clearTimeout(timeout);
-      if (!resp.ok) throw new Error('Failed to fetch data');
-      return await resp.json();
-    } catch (e) {
-      clearTimeout(timeout);
-      throw e;
-    }
-  }
+  fillFunFact("funfact-card", getRandomFunFact());
+}
 
-  function renderResults(data) {
-    clearResults();
-    let any = false;
+window.addEventListener('DOMContentLoaded', () => {
+  const birthdayInput = document.getElementById("birthday");
+  const themeSwitch = document.getElementById("themeSwitch");
+  const sectionToggles = document.querySelectorAll(".section-toggle");
 
-    // Fun Fact (always random on each render)
-    if (showFunFact && showFunFact.checked) {
-      results.appendChild(createFunFactCard());
-      any = true;
-    }
+  // Set default date
+  const todayStr = getTodayDateString();
+  birthdayInput.value = todayStr;
+  setTodayText(todayStr);
 
-    // Birthdays
-    if (showBirths && showBirths.checked && Array.isArray(data.births) && data.births.length) {
-      any = true;
-      const title = document.createElement('div');
-      title.className = 'card visible';
-      title.innerHTML = '<h2>🎂 Famous Birthdays</h2>';
-      results.appendChild(title);
-      data.births.slice(0, 7).forEach(birth => {
-        results.appendChild(createCard("birth", birth));
-      });
-    }
+  // Load for today
+  updateAll(todayStr);
 
-    // Events
-    if (showEvents && showEvents.checked && Array.isArray(data.events) && data.events.length) {
-      any = true;
-      const title = document.createElement('div');
-      title.className = 'card visible';
-      title.innerHTML = '<h2>📜 Notable Events</h2>';
-      results.appendChild(title);
-      data.events.slice(0, 7).forEach(event => {
-        results.appendChild(createCard("event", event));
-      });
-    }
-
-    // Deaths (unique message if empty)
-    if (showDeaths && showDeaths.checked) {
-      const deaths = Array.isArray(data.deaths) ? data.deaths : [];
-      const title = document.createElement('div');
-      title.className = 'card visible';
-      title.innerHTML = '<h2>🕯️ Notable Deaths</h2>';
-      results.appendChild(title);
-
-      if (deaths.length) {
-        any = true;
-        deaths.slice(0, 6).forEach(death => {
-          results.appendChild(createCard("death", death));
-        });
-      } else {
-        results.appendChild(createNoDeathsCard());
-        any = true;
-      }
-    }
-
-    // Holidays
-    if (showHolidays && showHolidays.checked && Array.isArray(data.holidays) && data.holidays.length) {
-      any = true;
-      const title = document.createElement('div');
-      title.className = 'card visible';
-      title.innerHTML = '<h2>🌟 Holidays & Observances</h2>';
-      results.appendChild(title);
-      data.holidays.slice(0, 4).forEach(holiday => {
-        results.appendChild(createCard("holiday", holiday));
-      });
-    }
-
-    if (!any) showMessage("No info found for this day or all sections are hidden.", '🫥');
-    revealOnScroll();
-  }
-
-  function showLoader(show) {
-    loader.style.display = show ? 'block' : 'none';
-  }
-
-  function getMonthDay(dateString) {
-    const [year, month, day] = dateString.split('-');
-    return {
-      month: String(Number(month)).padStart(2, '0'),
-      day: String(Number(day)).padStart(2, '0')
-    };
-  }
-
-  // When a toggle changes, re-render with last data (if any)
-  if (optionsForm) {
-    optionsForm.addEventListener('change', () => {
-      if (input.value && lastData) {
-        renderResults(lastData);
-      }
-    });
-  }
-
-  // Fetch and display deaths for today's date on page load
-  function showTodaysDeaths() {
-    // Set all toggles to off except deaths
-    if (showBirths) showBirths.checked = false;
-    if (showEvents) showEvents.checked = false;
-    if (showDeaths) showDeaths.checked = true;
-    if (showHolidays) showHolidays.checked = false;
-    if (showFunFact) showFunFact.checked = false;
-
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    input.value = `${yyyy}-${mm}-${dd}`;
-
-    showLoader(true);
-    fetchOnThisDay(mm, dd).then(data => {
-      lastData = data;
-      showLoader(false);
-      renderResults(data);
-    }).catch(() => {
-      showLoader(false);
-      showMessage('Sorry, something went wrong. Try again!', '😢');
-    });
-  }
-
-  // Standard change for birthday picker
-  input.addEventListener('change', async (e) => {
-    const val = e.target.value;
-    if (!val) {
-      showMessage("Please pick a date!", '📅');
-      return;
-    }
-    const { month, day } = getMonthDay(val);
-    showLoader(true);
-    try {
-      const data = await fetchOnThisDay(month, day);
-      lastData = data;
-      showLoader(false);
-      renderResults(data);
-    } catch (err) {
-      showLoader(false);
-      showMessage('Sorry, something went wrong. Try again!', '😢');
-    }
+  // Handle date change
+  birthdayInput.addEventListener("input", (e) => {
+    const date = e.target.value;
+    setTodayText(date);
+    updateAll(date);
   });
 
-  // On first load, show today's deaths
-  showTodaysDeaths();
+  // Theme switching
+  themeSwitch.addEventListener("change", (e) => {
+    setTheme(e.target.checked);
+  });
+
+  // Section filtering
+  sectionToggles.forEach(toggle => {
+    toggle.addEventListener("change", (e) => {
+      showSection(e.target.dataset.section, e.target.checked);
+    });
+  });
 });
