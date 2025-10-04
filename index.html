@@ -4,44 +4,56 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Birthday Explorer</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Fira+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="bg-animated">
-    <div class="shape shape1"></div>
-    <div class="shape shape2"></div>
-    <div class="shape shape3"></div>
-  </div>
-  <header>
-    <h1><i class="fa-solid fa-cake-candles"></i> Birthday Explorer</h1>
-    <form id="optionsForm" class="options-panel">
-      <label class="switch"><input type="checkbox" id="showBirths" checked><span class="slider"></span><span class="label-txt">Famous Birthdays</span></label>
-      <label class="switch"><input type="checkbox" id="showEvents" checked><span class="slider"></span><span class="label-txt">Notable Events</span></label>
-      <label class="switch"><input type="checkbox" id="showDeaths" checked><span class="slider"></span><span class="label-txt">Deaths</span></label>
-      <label class="switch"><input type="checkbox" id="showHolidays" checked><span class="slider"></span><span class="label-txt">Holidays</span></label>
-      <label class="switch"><input type="checkbox" id="showFunFact" checked><span class="slider"></span><span class="label-txt">Fun Fact</span></label>
-      <button id="darkToggle" type="button" aria-label="Toggle dark mode"><i class="fa-solid fa-moon"></i></button>
-    </form>
-    <label for="birthday-input" class="input-label">
-      <span><i class="fa-solid fa-calendar-days"></i> Pick your birthday:</span>
-      <input type="date" id="birthday-input" max="9999-12-31" />
-    </label>
-  </header>
-  <main id="results" class="results">
-    <div class="placeholder">
-      <div class="emoji-bounce">🎉</div>
-      <p>Enter your birthday and choose what to explore!</p>
-    </div>
+<body class="light">
+  <div class="background-waves"></div>
+  <main>
+    <header>
+      <h1>Birthday Explorer 🎂</h1>
+      <div class="theme-toggle">
+        <label>
+          <input type="checkbox" id="themeSwitch">
+          <span class="slider"></span>
+          <span class="mode-label">Light/Dark</span>
+        </label>
+      </div>
+    </header>
+    <section class="date-input-section">
+      <label for="birthday">Select your birthday:</label>
+      <input type="date" id="birthday">
+      <span id="today-text"></span>
+    </section>
+    <section class="filter-section">
+      <div class="filter-toggle">
+        <label><input type="checkbox" class="section-toggle" data-section="births" checked> Renowned Birthdays</label>
+        <label><input type="checkbox" class="section-toggle" data-section="deaths" checked> Renowned Deaths</label>
+        <label><input type="checkbox" class="section-toggle" data-section="movies" checked> Movies & Animes</label>
+        <label><input type="checkbox" class="section-toggle" data-section="funfact" checked> Fun Fact</label>
+      </div>
+    </section>
+    <section id="births-section" class="album-section">
+      <h2>Renowned Birthdays</h2>
+      <div class="album-list" id="births-album"></div>
+    </section>
+    <section id="deaths-section" class="album-section">
+      <h2>Renowned Deaths</h2>
+      <div class="album-list" id="deaths-album"></div>
+    </section>
+    <section id="movies-section" class="album-section">
+      <h2>Movies & Animes Released</h2>
+      <div class="album-list" id="movies-album"></div>
+    </section>
+    <section id="funfact-section" class="funfact-section">
+      <h2>Fun Fact</h2>
+      <div class="funfact-card" id="funfact-card"></div>
+    </section>
   </main>
   <footer>
-    <p>
-      Made with <span class="heart">❤️</span> by <a href="https://github.com/samdoes-stuff" target="_blank">@samdoes-stuff</a>
-      &middot; <span class="footer-tip">Try toggling some options!</span>
-    </p>
+    <span>Moai Github: <a href="https://github.com/moai" target="_blank">@moai</a></span>
+    <span>•</span>
+    <span>madewithlove</span>
   </footer>
-  <div id="loader" class="loader"></div>
   <script src="script.js"></script>
 </body>
 </html>
