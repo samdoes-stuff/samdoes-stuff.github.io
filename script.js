@@ -117,18 +117,21 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
+  // Store last fetched data for toggling
+  let lastData = null;
+
   function renderResults(data) {
     clearResults();
     let any = false;
 
     // Fun Fact
-    if (showFunFact.checked) {
+    if (showFunFact && showFunFact.checked) {
       results.appendChild(createFunFactCard());
       any = true;
     }
 
     // Birthdays
-    if (showBirths.checked && data.births && data.births.length) {
+    if (showBirths && showBirths.checked && data.births && data.births.length) {
       any = true;
       const title = document.createElement('div');
       title.className = 'card visible';
@@ -140,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Events
-    if (showEvents.checked && data.events && data.events.length) {
+    if (showEvents && showEvents.checked && data.events && data.events.length) {
       any = true;
       const title = document.createElement('div');
       title.className = 'card visible';
@@ -152,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Deaths
-    if (showDeaths.checked && data.deaths && data.deaths.length) {
+    if (showDeaths && showDeaths.checked && data.deaths && data.deaths.length) {
       any = true;
       const title = document.createElement('div');
       title.className = 'card visible';
@@ -164,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Holidays
-    if (showHolidays.checked && data.holidays && data.holidays.length) {
+    if (showHolidays && showHolidays.checked && data.holidays && data.holidays.length) {
       any = true;
       const title = document.createElement('div');
       title.className = 'card visible';
@@ -192,11 +195,10 @@ document.addEventListener("DOMContentLoaded", function() {
     };
   }
 
-  // Refresh results when toggles change
+  // When a toggle changes, re-render with last data (if any)
   optionsForm.addEventListener('change', () => {
-    // re-render if a date is already chosen and data loaded
-    if (input.value && input.dataset.lastData) {
-      renderResults(JSON.parse(input.dataset.lastData));
+    if (input.value && lastData) {
+      renderResults(lastData);
     }
   });
 
@@ -210,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function() {
     showLoader(true);
     try {
       const data = await fetchOnThisDay(month, day);
-      input.dataset.lastData = JSON.stringify(data); // Save last data for toggles
+      lastData = data; // store for toggling
       showLoader(false);
       renderResults(data);
     } catch (err) {
