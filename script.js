@@ -1,4 +1,3 @@
-// DOMContentLoaded ensures the toggle works even if script loads before the DOM is ready
 document.addEventListener("DOMContentLoaded", function() {
   const input = document.getElementById('birthday-input');
   const results = document.getElementById('results');
@@ -11,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const showHolidays = document.getElementById('showHolidays');
   const showFunFact = document.getElementById('showFunFact');
 
-  // Fun facts
+  // Fun facts list
   const funFacts = [
     "Did you know? Almost 17.7 million people around the world have the same birthday as you!",
     "People born on your birthday share a star sign with you.",
@@ -19,14 +18,18 @@ document.addEventListener("DOMContentLoaded", function() {
     "The odds of sharing your birthday with someone in a group of 23 is over 50%.",
     "Some cultures believe your birthday is a lucky day for new beginnings!",
     "You have a unique birthday number in the world’s population.",
-    "Famous historical figures may have celebrated just like you."
+    "Famous historical figures may have celebrated just like you.",
+    "Having a birthday means you survived another trip around the sun. Congratulations!",
+    "On your birthday, it’s statistically likely that 19 million other people are celebrating too.",
+    "You share your birthday with at least one famous person, guaranteed!"
   ];
+
+  let lastData = null;
 
   function randomFact() {
     return funFacts[Math.floor(Math.random() * funFacts.length)];
   }
 
-  // Dark mode toggle
   if (darkToggle) {
     darkToggle.addEventListener('click', () => {
       document.body.classList.toggle('dark');
@@ -85,6 +88,17 @@ document.addEventListener("DOMContentLoaded", function() {
     return card;
   }
 
+  function createNoDeathsCard() {
+    const card = document.createElement('div');
+    card.className = 'card visible';
+    card.innerHTML = `
+      <h2>🕯️ Notable Deaths</h2>
+      <div class="desc">No famous deaths are recorded for this date.<br>
+      <em>Sometimes, a day is just for the living! 🎉</em></div>
+    `;
+    return card;
+  }
+
   function revealOnScroll() {
     const cards = document.querySelectorAll('.card:not(.visible)');
     if (!('IntersectionObserver' in window)) {
@@ -117,21 +131,18 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
-  // Store last fetched data for toggling
-  let lastData = null;
-
   function renderResults(data) {
     clearResults();
     let any = false;
 
-    // Fun Fact
+    // Fun Fact (always random on each render)
     if (showFunFact && showFunFact.checked) {
       results.appendChild(createFunFactCard());
       any = true;
     }
 
     // Birthdays
-    if (showBirths && showBirths.checked && data.births && data.births.length) {
+    if (showBirths && showBirths.checked && Array.isArray(data.births) && data.births.length) {
       any = true;
       const title = document.createElement('div');
       title.className = 'card visible';
@@ -143,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Events
-    if (showEvents && showEvents.checked && data.events && data.events.length) {
+    if (showEvents && showEvents.checked && Array.isArray(data.events) && data.events.length) {
       any = true;
       const title = document.createElement('div');
       title.className = 'card visible';
@@ -154,20 +165,27 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     }
 
-    // Deaths
-    if (showDeaths && showDeaths.checked && data.deaths && data.deaths.length) {
-      any = true;
+    // Deaths (unique message if empty)
+    if (showDeaths && showDeaths.checked) {
+      const deaths = Array.isArray(data.deaths) ? data.deaths : [];
       const title = document.createElement('div');
       title.className = 'card visible';
       title.innerHTML = '<h2>🕯️ Notable Deaths</h2>';
       results.appendChild(title);
-      data.deaths.slice(0, 6).forEach(death => {
-        results.appendChild(createCard("death", death));
-      });
+
+      if (deaths.length) {
+        any = true;
+        deaths.slice(0, 6).forEach(death => {
+          results.appendChild(createCard("death", death));
+        });
+      } else {
+        results.appendChild(createNoDeathsCard());
+        any = true;
+      }
     }
 
     // Holidays
-    if (showHolidays && showHolidays.checked && data.holidays && data.holidays.length) {
+    if (showHolidays && showHolidays.checked && Array.isArray(data.holidays) && data.holidays.length) {
       any = true;
       const title = document.createElement('div');
       title.className = 'card visible';
@@ -186,7 +204,6 @@ document.addEventListener("DOMContentLoaded", function() {
     loader.style.display = show ? 'block' : 'none';
   }
 
-  // Helper: get mm/dd as strings with leading zeros
   function getMonthDay(dateString) {
     const [year, month, day] = dateString.split('-');
     return {
@@ -196,12 +213,41 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // When a toggle changes, re-render with last data (if any)
-  optionsForm.addEventListener('change', () => {
-    if (input.value && lastData) {
-      renderResults(lastData);
-    }
-  });
+  if (optionsForm) {
+    optionsForm.addEventListener('change', () => {
+      if (input.value && lastData) {
+        renderResults(lastData);
+      }
+    });
+  }
 
+  // Fetch and display deaths for today's date on page load
+  function showTodaysDeaths() {
+    // Set all toggles to off except deaths
+    if (showBirths) showBirths.checked = false;
+    if (showEvents) showEvents.checked = false;
+    if (showDeaths) showDeaths.checked = true;
+    if (showHolidays) showHolidays.checked = false;
+    if (showFunFact) showFunFact.checked = false;
+
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    input.value = `${yyyy}-${mm}-${dd}`;
+
+    showLoader(true);
+    fetchOnThisDay(mm, dd).then(data => {
+      lastData = data;
+      showLoader(false);
+      renderResults(data);
+    }).catch(() => {
+      showLoader(false);
+      showMessage('Sorry, something went wrong. Try again!', '😢');
+    });
+  }
+
+  // Standard change for birthday picker
   input.addEventListener('change', async (e) => {
     const val = e.target.value;
     if (!val) {
@@ -212,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function() {
     showLoader(true);
     try {
       const data = await fetchOnThisDay(month, day);
-      lastData = data; // store for toggling
+      lastData = data;
       showLoader(false);
       renderResults(data);
     } catch (err) {
@@ -221,6 +267,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  // Optionally, use today's date by default:
-  // input.value = new Date().toISOString().slice(0,10);
+  // On first load, show today's deaths
+  showTodaysDeaths();
 });
