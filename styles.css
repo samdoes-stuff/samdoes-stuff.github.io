@@ -1,0 +1,112 @@
+body {
+  margin: 0;
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: linear-gradient(120deg, #f5d0c5 0%, #c5e5f5 100%);
+  min-height: 100vh;
+  color: #2c2c2c;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  text-align: center;
+  padding: 2.5rem 1rem 1.5rem 1rem;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+header label {
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+}
+
+#birthday-input {
+  font-size: 1.1rem;
+  padding: 0.3em 0.6em;
+  border-radius: 0.4em;
+  border: 1px solid #b0b6c4;
+  background: #fff;
+}
+
+.results {
+  max-width: 650px;
+  margin: 2rem auto 1rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-height: 350px;
+}
+
+.placeholder {
+  background: rgba(255,255,255,0.7);
+  border-radius: 1rem;
+  padding: 2.5rem 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  text-align: center;
+  font-size: 1.2rem;
+  color: #596475;
+}
+
+.card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+  padding: 1.7rem 1.4rem;
+  opacity: 0;
+  transform: translateY(50px) scale(0.97);
+  transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+  will-change: opacity, transform;
+}
+
+.card.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.3rem;
+  color: #4f78aa;
+}
+
+.card .year {
+  font-weight: 500;
+  color: #445b77;
+  font-size: 1.07em;
+}
+
+.card .desc {
+  margin: 0.6em 0 0.2em 0;
+}
+
+.card a {
+  color: #3367d6;
+  font-size: 0.97em;
+  text-decoration: none;
+}
+
+footer {
+  text-align: center;
+  font-size: 1rem;
+  color: #6b7a8f;
+  margin-top: auto;
+  padding: 1.2rem 0 0.7rem 0;
+  background: none;
+  letter-spacing: 0.02em;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .results {
+    margin: 1.1rem 0.4rem 1rem 0.4rem;
+  }
+  .card {
+    padding: 1.2rem 0.7rem;
+  }
+}
