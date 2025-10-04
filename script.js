@@ -55,7 +55,6 @@ document.addEventListener("DOMContentLoaded", function() {
     results.appendChild(div);
   }
 
-  // --- Birthdays looping carousel ---
   function createBirthdaysCarousel(births) {
     const container = document.createElement('div');
     container.className = 'carousel-container';
@@ -115,18 +114,20 @@ document.addEventListener("DOMContentLoaded", function() {
     rightArrow.innerHTML = '<i class="fa fa-chevron-right"></i>';
     rightArrow.setAttribute('aria-label', 'Scroll right');
 
-    // Scroll to "first" card
-    setTimeout(() => {
-      carousel.scrollLeft = cards[0].offsetWidth + 20; // +gap
-    }, 10);
+    // Center the carousel on the first “real” card
+    function setInitialScroll() {
+      const cardWidth = cards[0].offsetWidth + 20;
+      carousel.scrollLeft = cardWidth;
+    }
+    setTimeout(setInitialScroll, 60);
 
     // Loop behavior
     function handleScroll() {
-      const cardWidth = cards[0].offsetWidth + 20; // gap
+      const cardWidth = cards[0].offsetWidth + 20;
       if (carousel.scrollLeft <= 0) {
         carousel.scrollLeft = cardWidth * cards.length;
       }
-      if (carousel.scrollLeft >= cardWidth * (cards.length+1)) {
+      if (carousel.scrollLeft >= cardWidth * (cards.length + 1)) {
         carousel.scrollLeft = cardWidth;
       }
     }
@@ -142,15 +143,15 @@ document.addEventListener("DOMContentLoaded", function() {
       carousel.scrollBy({left: cardWidth, behavior: 'smooth'});
     };
 
-    // Auto-scroll
+    // Auto-scroll loop
     let autoScroll = setInterval(() => {
       rightArrow.onclick();
-    }, 3500);
+    }, 3000);
     container.addEventListener('mouseenter', () => clearInterval(autoScroll));
     container.addEventListener('mouseleave', () => {
       autoScroll = setInterval(() => {
         rightArrow.onclick();
-      }, 3500);
+      }, 3000);
     });
 
     container.appendChild(leftArrow);
