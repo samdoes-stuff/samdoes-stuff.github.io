@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const darkToggle = document.getElementById('darkToggle');
   const optionsForm = document.getElementById('optionsForm');
   const showBirths = document.getElementById('showBirths');
+  const showEvents = document.getElementById('showEvents');
   const showDeaths = document.getElementById('showDeaths');
   const showHolidays = document.getElementById('showHolidays');
   const showFunFact = document.getElementById('showFunFact');
@@ -55,135 +56,26 @@ document.addEventListener("DOMContentLoaded", function() {
     results.appendChild(div);
   }
 
-  // --- Paging, always centered carousel ---
-  function createBirthdaysCarousel(births) {
-    const container = document.createElement('div');
-    container.className = 'carousel-container';
-
-    const label = document.createElement('div');
-    label.className = 'carousel-label';
-    label.innerHTML = '🎂 <span style="color:var(--accent);">Famous Birthdays</span>';
-    container.appendChild(label);
-
-    const outer = document.createElement('div');
-    outer.className = 'paging-carousel-outer';
-
-    const leftArrow = document.createElement('button');
-    leftArrow.className = 'paging-carousel-arrow';
-    leftArrow.innerHTML = '<i class="fa fa-chevron-left"></i>';
-    leftArrow.setAttribute('aria-label', 'Scroll left');
-
-    const rightArrow = document.createElement('button');
-    rightArrow.className = 'paging-carousel-arrow';
-    rightArrow.innerHTML = '<i class="fa fa-chevron-right"></i>';
-    rightArrow.setAttribute('aria-label', 'Scroll right');
-
-    const view = document.createElement('div');
-    view.className = 'paging-carousel-view';
-
-    const track = document.createElement('div');
-    track.className = 'paging-carousel-track';
-
-    // Main carousel logic: show 3 at a time, loop infinitely
-    let visibleCount = window.innerWidth < 700 ? 1 : 3;
-    let cardWidth = 190;
-    let gap = 28;
-    function getCardWidth() {
-      // Responsive: measure rendered card
-      const el = track.querySelector('.paging-carousel-card');
-      if (el) return el.offsetWidth + gap;
-      return cardWidth + gap;
+  function createCard(type, entry) {
+    let title = "";
+    let desc = "";
+    if (type === "birth" || type === "death" || type === "event" || type === "holiday") {
+      const parts = entry.text.split("–");
+      title = parts[1] ? parts[1].trim().split(',')[0] : entry.text;
+      desc = entry.text.trim();
     }
-
-    // Prepare cards (clone for looping)
-    let cards = births.slice(0, 12).map(birth => {
-      const page = (birth.pages && birth.pages[0]) || {};
-      const img = page.thumbnail ? page.thumbnail.source : 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg';
-      const name = (birth.text.split("–")[1] || birth.text).trim().split(',')[0];
-      const year = birth.year;
-      const works = page.extract || "No summary available.";
-      const wiki = page.content_urls ? page.content_urls.desktop.page : null;
-
-      const card = document.createElement('div');
-      card.className = 'paging-carousel-card';
-      card.tabIndex = 0;
-
-      card.innerHTML = `
-        <div class="carousel-img-wrap">
-          <img src="${img}" alt="${name}" class="carousel-img">
-          <div class="carousel-card-overlay" tabindex="-1">
-            <div class="carousel-card-overlay-title">${name}</div>
-            <div class="carousel-card-overlay-desc">${works}</div>
-          </div>
-        </div>
-        <div class="carousel-card-content">
-          <div class="carousel-card-name">${name}</div>
-          <div class="carousel-card-year">${year}</div>
-          ${wiki ? `<a class="carousel-card-link" href="${wiki}" target="_blank">Wikipedia</a>` : ""}
-        </div>
-      `;
-      return card;
-    });
-
-    // Looping: triple the cards for brute-force infinite effect
-    cards = [...cards.slice(-visibleCount), ...cards, ...cards.slice(0, visibleCount)];
-    cards.forEach((card) => track.appendChild(card));
-
-    let index = visibleCount; // Start at first "real" card
-    function updateCardWidthAndCount() {
-      visibleCount = window.innerWidth < 700 ? 1 : 3;
-      cardWidth = getCardWidth() - gap;
+    let wiki = "";
+    if (entry.pages && Array.isArray(entry.pages) && entry.pages[0] && entry.pages[0].content_urls) {
+      wiki = entry.pages[0].content_urls.desktop.page;
     }
-
-    function goTo(idx, animate=true) {
-      updateCardWidthAndCount();
-      index = idx;
-      track.style.transition = animate ? 'transform 0.5s cubic-bezier(.4,0,.2,1)' : 'none';
-      track.style.transform = `translateX(${-index * (cardWidth + gap)}px)`;
-    }
-
-    setTimeout(() => goTo(index, false), 100);
-
-    leftArrow.onclick = () => {
-      if (--index < 1) {
-        track.style.transition = 'none';
-        index = cards.length - (2 * visibleCount) - 1;
-        track.style.transform = `translateX(${-index * (cardWidth + gap)}px)`;
-        setTimeout(() => goTo(index - 1), 10);
-      } else {
-        goTo(index);
-      }
-    };
-    rightArrow.onclick = () => {
-      if (++index > cards.length - visibleCount - 1) {
-        track.style.transition = 'none';
-        index = visibleCount;
-        track.style.transform = `translateX(${-index * (cardWidth + gap)}px)`;
-        setTimeout(() => goTo(index + 1), 10);
-      } else {
-        goTo(index);
-      }
-    };
-
-    // Auto-rotate
-    let autoScroll = setInterval(() => { rightArrow.onclick(); }, 3400);
-    outer.addEventListener('mouseenter', () => clearInterval(autoScroll));
-    outer.addEventListener('mouseleave', () => {
-      autoScroll = setInterval(() => { rightArrow.onclick(); }, 3400);
-    });
-
-    // Responsive
-    window.addEventListener("resize", () => {
-      updateCardWidthAndCount();
-      goTo(index, false);
-    });
-
-    view.appendChild(track);
-    outer.appendChild(leftArrow);
-    outer.appendChild(view);
-    outer.appendChild(rightArrow);
-    container.appendChild(outer);
-    return container;
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <h2>${title} <span class="year">(${entry.year || entry.wikidata || ""})</span></h2>
+      <div class="desc">${desc}</div>
+      ${wiki ? `<a href="${wiki}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-wikipedia-w"></i> Wikipedia</a>` : ''}
+    `;
+    return card;
   }
 
   function createFunFactCard() {
@@ -203,28 +95,6 @@ document.addEventListener("DOMContentLoaded", function() {
       <h2>🕯️ Notable Deaths</h2>
       <div class="desc">No famous deaths are recorded for this date.<br>
       <em>Sometimes, a day is just for the living! 🎉</em></div>
-    `;
-    return card;
-  }
-
-  function createCard(type, entry) {
-    let title = "";
-    let desc = "";
-    if (type === "death" || type === "holiday") {
-      const parts = entry.text.split("–");
-      title = parts[1] ? parts[1].trim().split(',')[0] : entry.text;
-      desc = entry.text.trim();
-    }
-    let wiki = "";
-    if (entry.pages && Array.isArray(entry.pages) && entry.pages[0] && entry.pages[0].content_urls) {
-      wiki = entry.pages[0].content_urls.desktop.page;
-    }
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <h2>${title} <span class="year">(${entry.year || entry.wikidata || ""})</span></h2>
-      <div class="desc">${desc}</div>
-      ${wiki ? `<a href="${wiki}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-wikipedia-w"></i> Wikipedia</a>` : ''}
     `;
     return card;
   }
@@ -271,10 +141,28 @@ document.addEventListener("DOMContentLoaded", function() {
       any = true;
     }
 
-    // Birthdays - as carousel
+    // Birthdays
     if (showBirths && showBirths.checked && Array.isArray(data.births) && data.births.length) {
-      results.appendChild(createBirthdaysCarousel(data.births.slice(0, 12)));
       any = true;
+      const title = document.createElement('div');
+      title.className = 'card visible';
+      title.innerHTML = '<h2>🎂 Famous Birthdays</h2>';
+      results.appendChild(title);
+      data.births.slice(0, 7).forEach(birth => {
+        results.appendChild(createCard("birth", birth));
+      });
+    }
+
+    // Events
+    if (showEvents && showEvents.checked && Array.isArray(data.events) && data.events.length) {
+      any = true;
+      const title = document.createElement('div');
+      title.className = 'card visible';
+      title.innerHTML = '<h2>📜 Notable Events</h2>';
+      results.appendChild(title);
+      data.events.slice(0, 7).forEach(event => {
+        results.appendChild(createCard("event", event));
+      });
     }
 
     // Deaths (unique message if empty)
@@ -286,17 +174,19 @@ document.addEventListener("DOMContentLoaded", function() {
       results.appendChild(title);
 
       if (deaths.length) {
+        any = true;
         deaths.slice(0, 6).forEach(death => {
           results.appendChild(createCard("death", death));
         });
       } else {
         results.appendChild(createNoDeathsCard());
+        any = true;
       }
-      any = true;
     }
 
     // Holidays
     if (showHolidays && showHolidays.checked && Array.isArray(data.holidays) && data.holidays.length) {
+      any = true;
       const title = document.createElement('div');
       title.className = 'card visible';
       title.innerHTML = '<h2>🌟 Holidays & Observances</h2>';
@@ -304,7 +194,6 @@ document.addEventListener("DOMContentLoaded", function() {
       data.holidays.slice(0, 4).forEach(holiday => {
         results.appendChild(createCard("holiday", holiday));
       });
-      any = true;
     }
 
     if (!any) showMessage("No info found for this day or all sections are hidden.", '🫥');
@@ -332,10 +221,12 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // Fetch and display birthdays for today's date on page load
-  function showTodaysBirths() {
-    if (showBirths) showBirths.checked = true;
-    if (showDeaths) showDeaths.checked = false;
+  // Fetch and display deaths for today's date on page load
+  function showTodaysDeaths() {
+    // Set all toggles to off except deaths
+    if (showBirths) showBirths.checked = false;
+    if (showEvents) showEvents.checked = false;
+    if (showDeaths) showDeaths.checked = true;
     if (showHolidays) showHolidays.checked = false;
     if (showFunFact) showFunFact.checked = false;
 
@@ -376,5 +267,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  showTodaysBirths();
+  // On first load, show today's deaths
+  showTodaysDeaths();
 });
