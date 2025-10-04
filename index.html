@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Birthday Explorer — Art Edition</title>
+  <title>Birthday Explorer</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Fira+Mono&display=swap" rel="stylesheet">
@@ -13,13 +13,12 @@
     <div class="shape shape1"></div>
     <div class="shape shape2"></div>
     <div class="shape shape3"></div>
-    <div class="art-sparkle"></div>
-    <div class="art-sparkle2"></div>
   </div>
   <header>
-    <h1><i class="fa-solid fa-cake-candles"></i> <span class="title-gradient">Birthday Explorer</span></h1>
+    <h1><i class="fa-solid fa-cake-candles"></i> Birthday Explorer</h1>
     <form id="optionsForm" class="options-panel">
       <label class="switch"><input type="checkbox" id="showBirths" checked><span class="slider"></span><span class="label-txt">Famous Birthdays</span></label>
+      <label class="switch"><input type="checkbox" id="showEvents" checked><span class="slider"></span><span class="label-txt">Notable Events</span></label>
       <label class="switch"><input type="checkbox" id="showDeaths" checked><span class="slider"></span><span class="label-txt">Deaths</span></label>
       <label class="switch"><input type="checkbox" id="showHolidays" checked><span class="slider"></span><span class="label-txt">Holidays</span></label>
       <label class="switch"><input type="checkbox" id="showFunFact" checked><span class="slider"></span><span class="label-txt">Fun Fact</span></label>
@@ -33,13 +32,13 @@
   <main id="results" class="results">
     <div class="placeholder">
       <div class="emoji-bounce">🎉</div>
-      <p>Enter your birthday and discover the art of time!</p>
+      <p>Enter your birthday and choose what to explore!</p>
     </div>
   </main>
   <footer>
     <p>
       Made with <span class="heart">❤️</span> by <a href="https://github.com/samdoes-stuff" target="_blank">@samdoes-stuff</a>
-      &middot; <span class="footer-tip">Enjoy the carousel and toggles!</span>
+      &middot; <span class="footer-tip">Try toggling some options!</span>
     </p>
   </footer>
   <div id="loader" class="loader"></div>
