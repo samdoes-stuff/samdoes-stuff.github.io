@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Birthday History Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:," />
+</head>
+<body>
+  <header>
+    <h1>🎂 Birthday History Portal</h1>
+    <button id="theme-toggle" aria-label="Toggle theme">
+      <span id="theme-icon">🌙</span>
+    </button>
+  </header>
+  <main>
+    <section id="controls">
+      <form id="birthday-form">
+        <label>
+          Select your birthday:
+          <input type="date" id="birthday-input" max="">
+        </label>
+        <button type="submit">Show History</button>
+      </form>
+      <div id="category-toggles">
+        <label><input type="checkbox" id="opt-births" checked> Births</label>
+        <label><input type="checkbox" id="opt-deaths" checked> Deaths</label>
+        <label><input type="checkbox" id="opt-movies" checked> Movies</label>
+        <label><input type="checkbox" id="opt-anime" checked> Anime</label>
+      </div>
+    </section>
+    <section id="results">
+      <div class="cards" id="births"></div>
+      <div class="cards" id="deaths"></div>
+      <div class="cards" id="movies"></div>
+      <div class="cards" id="anime"></div>
+    </section>
+  </main>
+  <footer>
+    <p>Made with 💖 | <a href="https://github.com/" target="_blank">Source</a></p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
