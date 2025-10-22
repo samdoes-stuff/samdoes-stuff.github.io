@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CZSSPC - কুমিল্লা জিলা স্কুল বিজ্ঞান প্রজেক্ট ক্লাব</title>
+  <meta name="description" content="Comilla Zilla School Science Project Club - Leadership, Projects, Contact">
+  <link rel="icon" type="image/png" href="club-logo.jpg">
+  <!-- TailwindCSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: 'Noto Sans Bengali', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
+      <div class="flex items-center gap-3">
+        <img src="club-logo.jpg" alt="CZSSPC Logo" class="w-12 h-12 rounded-full shadow-lg">
+        <span class="font-bold text-xl">CZSSPC</span>
+      </div>
+      <div class="hidden md:flex gap-6 font-medium" id="menu-links">
+        <a href="#home" class="hover:text-blue-600">হোম</a>
+        <a href="#leadership" class="hover:text-blue-600">নেতৃত্ব</a>
+        <a href="#projects" class="hover:text-blue-600">প্রকল্প</a>
+        <a href="#contact" class="hover:text-blue-600">যোগাযোগ</a>
+      </div>
+      <button id="mobile-menu-btn" class="md:hidden px-3 py-2 rounded hover:bg-blue-50 transition text-xl">
+        ☰
+      </button>
+    </div>
+    <div class="md:hidden" id="mobile-menu" style="display:none;">
+      <a href="#home" class="block px-4 py-2 text-gray-700 hover:bg-blue-100">হোম</a>
+      <a href="#leadership" class="block px-4 py-2 text-gray-700 hover:bg-blue-100">নেতৃত্ব</a>
+      <a href="#projects" class="block px-4 py-2 text-gray-700 hover:bg-blue-100">প্রকল্প</a>
+      <a href="#contact" class="block px-4 py-2 text-gray-700 hover:bg-blue-100">যোগাযোগ</a>
+    </div>
+  </nav>
+  
+  <!-- Hero Section -->
+  <section id="home" class="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white py-20">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <img src="club-logo.jpg" alt="CZSSPC Logo" class="mx-auto w-32 h-32 rounded-full mb-4 shadow-2xl border-4 border-white">
+      <h1 class="text-4xl md:text-5xl font-bold mb-2">কুমিল্লা জিলা স্কুল বিজ্ঞান প্রজেক্ট ক্লাব</h1>
+      <p class="text-xl mb-6">LEARN MORE TO INVENT NEW</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#leadership" class="bg-white text-blue-600 px-6 py-2 rounded-xl font-semibold shadow hover:bg-blue-50 transition">নেতৃত্ব দেখুন</a>
+        <a href="#contact" class="border-2 border-white px-6 py-2 rounded-xl font-semibold shadow hover:bg-white hover:text-blue-600 transition">যোগাযোগ করুন</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Leadership Section -->
+  <section id="leadership" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-10">নেতৃত্ব পরিষদ</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <!-- Update images/names/positions as needed -->
+        <div class="card">
+          <img src="20201105105304.jpg" alt="Shemol Chandra Das" class="card-img">
+          <h3 class="card-title">জনাব শ্যামল চন্দ্র দাস</h3>
+          <p class="card-role">প্রধান মডারেটর</p>
+          <p class="card-desc">ক্লাবের সামগ্রিক কার্যক্রম তদারকি করেন</p>
+        </div>
+        <div class="card">
+          <img src="20220203125157.jpg" alt="MD. Ibrahim Khalil" class="card-img">
+          <h3 class="card-title">Md. Ibrahim Khalil</h3>
+          <p class="card-role">মডারেটর (Morning)</p>
+          <p class="card-desc">প্রভাতী শিফটের সকল কার্যক্রম পরিচালনা করেন</p>
+        </div>
+        <div class="card">
+          <img src="20250524104739.jpg" alt="Md Abul Kalam Azad" class="card-img">
+          <h3 class="card-title">Md Abul Kalam Azad</h3>
+          <p class="card-role">মডারেটর (Day)</p>
+          <p class="card-desc">দিবা শিফটের সকল কার্যক্রম পরিচালনা করেন</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Projects Section -->
+  <section id="projects" class="py-20 bg-blue-50">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-10">উল্লেখযোগ্য প্রকল্প</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Example projects, update or duplicate as needed -->
+        <div class="project-card">
+          <img src="https://images.pexels.com/photos/433308/pexels-photo-433308.jpeg?auto=compress&cs=tinysrgb&w=800" alt="" class="project-img">
+          <div class="p-6">
+            <h3 class="project-title">সৌর শক্তি ব্যবহার করে পানি বিশুদ্ধকরণ</h3>
+            <p class="project-desc">পরিবেশ বান্ধব প্রযুক্তি ব্যবহার করে পানি বিশুদ্ধকরণ পদ্ধতি উদ্ভাবন।</p>
+            <p class="project-team">দল: রহিম উদ্দিন, সালমা আক্তার, করিম মিয়া</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="https://images.pexels.com/photos/1072824/pexels-photo-1072824.jpeg?auto=compress&cs=tinysrgb&w=800" alt="" class="project-img">
+          <div class="p-6">
+            <h3 class="project-title">মাটির গুণাগুণ পরীক্ষা</h3>
+            <p class="project-desc">কৃষিক্ষেত্রে উন্নতির জন্য মাটির গুণাগুণ বিশ্লেষণ।</p>
+            <p class="project-team">দল: ফাতেমা খাতুন, আবদুল করিম</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="https://images.pexels.com/photos/459728/pexels-photo-459728.jpeg?auto=compress&cs=tinysrgb&w=800" alt="" class="project-img">
+          <div class="p-6">
+            <h3 class="project-title">বায়ু দূষণ নিয়ন্ত্রণ</h3>
+            <p class="project-desc">শহরাঞ্চলে বায়ু দূষণ কমানোর জন্য উদ্ভাবনী সমাধান।</p>
+            <p class="project-team">দল: নাসির উদ্দিন, রুমানা আক্তার, মোহাম্মদ আলী</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-12">
+      <a href="#contact" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition inline-block shadow-lg">যোগাযোগ করুন প্রকল্পের জন্য</a>
+    </div>
+  </section>
+  
+  <!-- Contact Section -->
+  <section id="contact" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-10">যোগাযোগ</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <div class="mb-6">
+            <h3 class="font-semibold text-lg mb-2">ঠিকানা</h3>
+            <p class="text-gray-700">কুমিল্লা জিলা স্কুল, কুমিল্লা-৩৫০০, বাংলাদেশ</p>
+          </div>
+          <div class="mb-6">
+            <h3 class="font-semibold text-lg mb-2">ফোন</h3>
+            <p class="text-gray-700">+880 1234-567890</p>
+          </div>
+          <div class="mb-6">
+            <h3 class="font-semibold text-lg mb-2">ইমেইল</h3>
+            <p class="text-gray-700">czsspc2019@outlook.in</p>
+          </div>
+        </div>
+        <div>
+          <form class="bg-blue-50 rounded-xl p-6 shadow-lg" id="contact-form">
+            <label class="block mb-3">
+              <span class="block text-sm font-medium text-gray-800">আপনার নাম</span>
+              <input type="text" class="mt-1 block w-full border-gray-300 rounded-lg" required>
+            </label>
+            <label class="block mb-3">
+              <span class="block text-sm font-medium text-gray-800">ইমেইল</span>
+              <input type="email" class="mt-1 block w-full border-gray-300 rounded-lg" required>
+            </label>
+            <label class="block mb-4">
+              <span class="block text-sm font-medium text-gray-800">বার্তা</span>
+              <textarea rows="3" class="mt-1 block w-full border-gray-300 rounded-lg" required></textarea>
+            </label>
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">পাঠান</button>
+            <p id="form-message" class="mt-4 text-green-600 hidden">আপনার বার্তা পাঠানো হয়েছে!</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-sm">&copy; 2025 CZSSPC - কুমিল্লা জিলা স্কুল বিজ্ঞান প্রজেক্ট ক্লাব</p>
+      <div class="flex gap-6 text-sm">
+        <a href="#" class="hover:text-blue-200">গোপনীয়তা নীতি</a>
+        <a href="#" class="hover:text-blue-200">শর্তাবলী</a>
+      </div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
